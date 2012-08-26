@@ -11,9 +11,9 @@ a JavaScript API.
 Initially NodeTV will only be supported on -nix-based systems - specifically Debian/Ubuntu and Mac OSX, however Windows support is on the radar. 
 NodeTV's only prerequisites are:
 
-* Node.js 0.8.x <http://nodejs.org/download/>
-* Google Chrome 12.0.x.x <https://www.google.com/chrome>
-* Git 1.7.9.x <http://git-scm.com>
+* Node.js 0.8.x (<http://nodejs.org/download/>)
+* Google Chrome 12.0.x.x (<https://www.google.com/chrome>)
+* Git 1.7.9.x (<http://git-scm.com>)
 
 ## Installation
 
