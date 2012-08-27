@@ -1,0 +1,35 @@
+{
+  "name": "NodeTV",
+  "version": "0.1.0",
+  "author": "Gordon Hall <gordon@gordonwritescode.com>",
+  "description": "a complete web-based media delivery solution for desktop and home theater computers",
+  "contributors": [ 
+    {
+      "name": "Marak Squires",
+      "email": "marak@nodejitsu.com"
+    } 
+  ],
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "main": "./app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gordonwritescode/NodeTV.git"
+  },
+  "keywords": [
+    "home theater",
+    "tv",
+    "media tv"
+  ],
+  "dependencies" : {
+    "gitty"   :  "0.0.x",
+    "express" :  "3.x.x",
+    "jade" :  "0.27.x",
+    "socket.io" :  "0.9.x"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.4"
+  }
+}

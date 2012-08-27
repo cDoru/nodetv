@@ -1,0 +1,12 @@
+/*
+ * NodeTV - styles/fonts.css
+ * Author: Gordon Hall
+ */
+
+/* Cubic - Logo
+*/
+@font-face {
+    font-family: Cubic;
+    src: url('/assets/fonts/cubic.ttf');
+    font-weight: normal;
+}
