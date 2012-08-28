@@ -9,7 +9,11 @@ module.exports = function(io) {
 	
 	var remoteConnected = function(socket) {
 		
-		
+		// catch button press and pass back to client
+		socket.on('buttonPress', function(button) {
+			console.log('Passing remote input: ' + button.pressed);
+			socket.emit('buttonAction', button);
+		});
 		
 	};
 	
@@ -24,7 +28,7 @@ module.exports = function(io) {
 		// when the client sends type, determine whether
 		// to start remote listener or not
 		socket.on('client_type', function(client) {
-			console.log(client);
+			console.log('Client connected in ' + client.type + ' mode.');
 			if (client.type === 'remote') {
 				remoteConnected.call(this, socket);
 			}

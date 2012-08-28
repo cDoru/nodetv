@@ -7,7 +7,118 @@
 
 NTV.remote = (function() {
 	
-	// map button events to keyboard, and socket server
+	// get remote DOM elements
+	var remote = $('#remote')
+	  , buttons = {
+			left : $('.left', remote),
+			right : $('.right', remote),
+			up : $('.up', remote),
+			down : $('.down', remote),
+			menu : $('.menu', remote),
+			back : $('.back', remote),
+			select : $('.select', remote),
+			play : $('.play', remote),
+			stop : $('.stop', remote),
+			trackLeft : $('.trackLeft', remote),
+			trackRight : $('.trackRight', remote)
+		}
+	  , actions = null
+	  , socket = io.connect('http://localhost');
 	
-		
+	// we need to create an action set that can be switched
+	// on the fly, so first an action set constructor and
+	// then a method for switching the current active action set
+	var ActionSet = function(action_obj) {	
+		// pull in all the valid properties
+		this.actions = action_obj;
+	}
+	// allow switching out actions indirectly
+	ActionSet.prototype.enable = function() {
+		actions = this.actions;
+	}
+	
+	// create the default action set
+	NTV.actions.applist = new ActionSet({
+		right : function(e) {
+			
+		},
+		up : function(e) {
+			
+		},
+		down : function(e) {
+			
+		},
+		select : function(e) {
+			
+		}
+	});
+	// enable the default action set for app list
+	NTV.actions.applist.enable();
+	
+	// bind the remote buttons to the mapped actions
+	if (NTV.client === 'remote') {
+		blueprint.each(buttons, function(button, elm) {
+			elm.bind('touchstart', function(event) {
+				// send socket.io event
+				socket.emit('buttonPress', { 
+					pressed : button,
+					evt : event
+				});
+			});
+		});
+	}
+	
+	// listen for socket.io event to execute callback
+	// if in tv mode, also map to keyboard function 
+	// in case user does not have a remote
+	if (NTV.client === 'tv') {
+		socket.on('buttonAction', function(button) {
+			console.log('Remote input detected: ' + JSON.stringify(button));
+			if (actions[button.pressed]) {
+				actions[button.pressed].call(this, button.evt);
+			}
+		});
+	
+		// map button events to keyboard
+		tappa.state({
+			'left' : function() {
+				$('.left', remote).trigger('touchstart');
+			},
+			'right' :function() {
+				$('.right', remote).trigger('touchstart');
+			},
+			'up' : function() {
+				$('.up', remote).trigger('touchstart');
+			},
+			'down' : function() {
+				$('.down', remote).trigger('touchstart');
+			},
+			'm' : function() {
+				$('.menu', remote).trigger('touchstart');
+			},
+			'b' : function() {
+				$('.back', remote).trigger('touchstart');
+			},
+			'enter' : function() {
+				$('.select', remote).trigger('touchstart');
+			},
+			'space' : function() {
+				$('.play', remote).trigger('touchstart');
+			},
+			'x' : function() {
+				$('.stop', remote).trigger('touchstart');
+			},
+			'comma' : function() {
+				$('.trackLeft', remote).trigger('touchstart');
+			},
+			'period' : function() {
+				$('.trackRight', remote).trigger('touchstart');
+			},
+		});
+	}
+	
+	return {
+		ActionSet : ActionSet
+	};
+	
 })();
