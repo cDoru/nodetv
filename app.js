@@ -14,12 +14,14 @@
 	    git = require('gitty'),
 	// get middleware
 	    express = require('express'),
-	    app = express(),
+	    app = express.createServer(),
 	    http = require('http'),
-	    server = http.createServer(app),
 	    jade = require('jade'),
 	// create socket connection
-	    io = require('socket.io').listen(server);
+	    io = require('socket.io').listen(app);
+	
+	// load modules
+	require('./remote.js')(io);
 	
 	// config server
 	app.configure(function() {
