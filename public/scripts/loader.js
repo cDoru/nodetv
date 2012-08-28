@@ -12,7 +12,7 @@ var NTV = (function() {
 	];
 	
 	blueprint.load(modules, function() {
-		NTV.init();
+	//	NTV.init();
 	});
 	
 	return {};

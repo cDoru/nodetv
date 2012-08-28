@@ -8,7 +8,4 @@
 NTV.remote = (function() {
 	
 	
-	
-	
-	
 })();
