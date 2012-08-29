@@ -30,7 +30,6 @@ module.exports = function(io) {
 		// catch button press and pass back to client
 		socket.on('buttonPress', function(button) {
 			console.log('Passing remote input: ' + button.pressed);
-			socket.emit('buttonAction', button);
 		});	
 	});
 

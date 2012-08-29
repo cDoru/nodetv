@@ -25,13 +25,48 @@
 	  , nslookup = require('dns').lookup
 	  , netIp;
 	
-	nslookup(os.hostname(), function(err, addr, fam) {
-		netIp = addr;
-		// once IP is resolved, start the server
-		// this nslookup fixes an issue for devices that are unable
-		// to resolve a hostname over LAN, like Android
-		init();
-	});
+	// console output colors
+	var red = '\u001b[31m'
+	  , blue = '\u001b[34m'
+	  , reset = '\u001b[0m';
+	
+	var ipFlag = false;
+	console.log('Starting NodeTV...');
+	console.log('Resolving network IP...');
+	resolveIp(os.hostname());	
+	
+	function resolveIp(hostname) {
+		// determine network ip from hostname
+		nslookup(hostname, function(err, addr, fam) {
+			// if failed
+			if (err) {
+				// if there is a domain in the hostname
+				if (os.hostname().split('.').length === 3) {
+					// let the user know
+					console.log(red + '!!! ' + reset + 'NodeTV has detected a potential issue while resolving your IP, applying workaround...');
+					ipFlag = true;
+					// try again without it
+					var hostNoDomain = os.hostname().split('.')[0] + '.' + os.hostname().split('.')[2];
+					resolveIp(hostNoDomain);
+				} else {
+					// otherwise tell the user something's up
+					console.log(red + 'There was a problem resolving the network IP from the server\'s hostname.' + reset);
+					// and quit
+					process.exit();
+				}
+			} else {
+				if (ipFlag) {
+					console.log(red + '!!! ' + reset + 'NodeTV applied a workaround for an issue and may exhibit unexpected behavior.');
+				}
+				// all is good give NodeTV the resolved IP
+				netIp = addr;
+				// once IP is resolved, start the server
+				// this nslookup fixes an issue for devices that are unable
+				// to resolve a hostname over LAN, like Android
+				init();
+			}
+		});
+	}
 	
 	function init() {
 		// load modules
@@ -90,7 +125,7 @@
 		 */
 
 		app.listen(port, function() {
-			console.log('NodeTV running at port ' + port);
+			console.log('NodeTV running at ' + netIp + ':' + port);
 		});
 	}
 

@@ -59,7 +59,7 @@ NTV.remote = (function() {
 		blueprint.each(buttons, function(button, elm) {
 			elm.bind('click', function(event) {
 				// send socket.io event
-				NTV.socket.emit('buttonPress', { 
+				NTV.socket.broadcast('buttonPress', { 
 					pressed : button
 				});
 			});
@@ -70,7 +70,7 @@ NTV.remote = (function() {
 	// if in tv mode, also map to keyboard function 
 	// in case user does not have a remote
 	if (NTV.client == 'tv') {
-		NTV.socket.on('buttonAction', function(button) {
+		NTV.socket.on('buttonPress', function(button) {
 			console.log('Remote input detected: ' + button.pressed);
 			if (actions[button.pressed]) {
 				actions[button.pressed].call(this);
