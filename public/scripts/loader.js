@@ -55,7 +55,8 @@ var NTV = (function() {
 	return {
 		client : client.type,
 		actions : {},
-		netIp : netIp
+		netIp : netIp,
+		socket : socket
 	};
 	
 })();

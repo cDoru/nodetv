@@ -27,65 +27,71 @@
 	
 	nslookup(os.hostname(), function(err, addr, fam) {
 		netIp = addr;
+		// once IP is resolved, start the server
+		// this nslookup fixes an issue for devices that are unable
+		// to resolve a hostname over LAN, like Android
+		init();
 	});
 	
-	// load modules
-	require('./remote.js')(io);
+	function init() {
+		// load modules
+		require('./remote.js')(io);
 	
-	// config server
-	app.configure(function() {
+		// config server
+		app.configure(function() {
 
-		// set view directory and engine
-		app.set('views', __dirname + '/views');
-		app.set('view engine', 'jade');
+			// set view directory and engine
+			app.set('views', __dirname + '/views');
+			app.set('view engine', 'jade');
 
-		// methodOverride checks req.body.method for the HTTP method override
-		// bodyParser parses the request body and populates req.body
-		app.use(express.methodOverride());
-		app.use(express.bodyParser());
+			// methodOverride checks req.body.method for the HTTP method override
+			// bodyParser parses the request body and populates req.body
+			app.use(express.methodOverride());
+			app.use(express.bodyParser());
 
-		// use cookie parser
-		app.use(express.cookieParser());
+			// use cookie parser
+			app.use(express.cookieParser());
 
-		// set public directory for static files
-		app.use(express.static(__dirname + '/public'));
+			// set public directory for static files
+			app.use(express.static(__dirname + '/public'));
 
-		// use router for non-static files
-		app.use(app.router);
+			// use router for non-static files
+			app.use(app.router);
 
-	});
-
-	// dev env
-	app.configure('development', function(){
-		app.use(express.errorHandler({
-			dumpExceptions: true, 
-			showStack: true 
-		}));
-	});
-
-	// prod env
-	app.configure('production', function(){
-		app.use(express.errorHandler());
-	});
-		
-	/*
-	 * http routes
-	 */
-	
-	// render app
-	app.get('/', function(req, res) {
-		res.render('index', { 
-			layout : 'layout',
-			netIp : 'http://' + netIp + ':' + port
 		});
-	});
 
-	/*
-	 * start server
-	 */
+		// dev env
+		app.configure('development', function(){
+			app.use(express.errorHandler({
+				dumpExceptions: true, 
+				showStack: true 
+			}));
+		});
 
-	app.listen(port, function() {
-		console.log('NodeTV running at port ' + port);
-	});
+		// prod env
+		app.configure('production', function(){
+			app.use(express.errorHandler());
+		});
+		
+		/*
+		 * http routes
+		 */
+	
+		// render app
+		app.get('/', function(req, res) {
+			res.render('index', { 
+				layout : 'layout',
+				netIp : 'http://' + netIp
+			});
+		});
+
+		/*
+		 * start server
+		 */
+
+		app.listen(port, function() {
+			console.log('NodeTV running at port ' + port);
+		});
+	}
 
 })();

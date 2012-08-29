@@ -22,9 +22,8 @@ NTV.remote = (function() {
 			trackLeft : $('.trackLeft', remote),
 			trackRight : $('.trackRight', remote)
 		}
-	  , actions = null
-	  , socket = io.connect(NTV.netIp);
-	
+	  , actions = null;
+		
 	// we need to create an action set that can be switched
 	// on the fly, so first an action set constructor and
 	// then a method for switching the current active action set
@@ -49,20 +48,19 @@ NTV.remote = (function() {
 			
 		},
 		select : function(e) {
-			alert('select')
+			alert('select');
 		}
 	});
 	// enable the default action set for app list
 	NTV.actions.applist.enable();
 	
 	// bind the remote buttons to the mapped actions
-	if (NTV.client === 'remote') {
+	if (NTV.client == 'remote') {
 		blueprint.each(buttons, function(button, elm) {
-			elm.bind('touchstart', function(event) {
+			elm.bind('click', function(event) {
 				// send socket.io event
-				socket.emit('buttonPress', { 
-					pressed : button,
-					evt : event
+				NTV.socket.emit('buttonPress', { 
+					pressed : button
 				});
 			});
 		});
@@ -71,11 +69,11 @@ NTV.remote = (function() {
 	// listen for socket.io event to execute callback
 	// if in tv mode, also map to keyboard function 
 	// in case user does not have a remote
-	if (NTV.client === 'tv') {
-		socket.on('buttonAction', function(button) {
-			console.log('Remote input detected: ' + JSON.stringify(button));
+	if (NTV.client == 'tv') {
+		NTV.socket.on('buttonAction', function(button) {
+			console.log('Remote input detected: ' + button.pressed);
 			if (actions[button.pressed]) {
-				actions[button.pressed].call(this, button.evt);
+				actions[button.pressed].call(this);
 			}
 		});
 	
