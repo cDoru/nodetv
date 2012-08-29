@@ -7,7 +7,7 @@
 
 module.exports = function(io) {
 	
-	var remoteConnected = function(socket) {
+	function remoteConnected(socket) {
 		
 		// catch button press and pass back to client
 		socket.on('buttonPress', function(button) {
@@ -27,7 +27,7 @@ module.exports = function(io) {
 		});
 		// when the client sends type, determine whether
 		// to start remote listener or not
-		socket.on('client_type', function(client) {
+		socket.on('clientType', function(client) {
 			console.log('Client connected in ' + client.type + ' mode.');
 			if (client.type === 'remote') {
 				remoteConnected.call(this, socket);

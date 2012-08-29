@@ -12,8 +12,9 @@ var NTV = (function() {
 		'/scripts/modules/ntv-client.js',
 		'/scripts/modules/remote-client.js'
 		]
+	  , netIp = document.title
 	// open socket connection
-	  , socket = io.connect('http://localhost')
+	  , socket = io.connect(netIp)
 	// determine client type
 	  , isMobile = {
 		    Android: function() {
@@ -42,7 +43,7 @@ var NTV = (function() {
 	// tell server what type of device connected
 	socket.on('connected', function(data) {
 		console.log(data);
-		socket.emit('client_type', client);
+		socket.emit('clientType', client);
 	});
 	
 	// load modules
@@ -53,7 +54,8 @@ var NTV = (function() {
 	// return empty obj to extend
 	return {
 		client : client.type,
-		actions : {}
+		actions : {},
+		netIp : netIp
 	};
 	
 })();

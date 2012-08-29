@@ -23,7 +23,7 @@ NTV.remote = (function() {
 			trackRight : $('.trackRight', remote)
 		}
 	  , actions = null
-	  , socket = io.connect('http://localhost');
+	  , socket = io.connect(NTV.netIp);
 	
 	// we need to create an action set that can be switched
 	// on the fly, so first an action set constructor and
@@ -49,7 +49,7 @@ NTV.remote = (function() {
 			
 		},
 		select : function(e) {
-			
+			alert('select')
 		}
 	});
 	// enable the default action set for app list

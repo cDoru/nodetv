@@ -8,17 +8,26 @@
 (function() {
 
 	// init vars
-	var config,
+	var config
 	// get modules
-	    fs = require('fs'),
-	    git = require('gitty'),
+	  , fs = require('fs')
+	  , git = require('gitty')
+	// get os module
+	  , os = require('os')
 	// get middleware
-	    express = require('express'),
-	    app = express.createServer(),
-	    http = require('http'),
-	    jade = require('jade'),
+	  , express = require('express')
+	  , app = express.createServer()
+	  , http = require('http')
+	  , jade = require('jade')
 	// create socket connection
-	    io = require('socket.io').listen(app);
+	  , io = require('socket.io').listen(app)
+	  , port = 1337
+	  , nslookup = require('dns').lookup
+	  , netIp;
+	
+	nslookup(os.hostname(), function(err, addr, fam) {
+		netIp = addr;
+	});
 	
 	// load modules
 	require('./remote.js')(io);
@@ -66,7 +75,8 @@
 	// render app
 	app.get('/', function(req, res) {
 		res.render('index', { 
-			layout: 'layout' 
+			layout : 'layout',
+			netIp : 'http://' + netIp + ':' + port
 		});
 	});
 
@@ -74,8 +84,8 @@
 	 * start server
 	 */
 
-	app.listen(1337, function() {
-		console.log('NodeTV running at port 1337');
+	app.listen(port, function() {
+		console.log('NodeTV running at port ' + port);
 	});
 
 })();
