@@ -15,6 +15,7 @@ NTV.applist = (function() {
 	blueprint.request({
 		type : 'GET',
 		url : '/applist',
+		expect : 'json',
 		beforeSend : function(req) {
 			NTV.ui.notify('Getting application list...', null, true);
 		},
@@ -25,15 +26,16 @@ NTV.applist = (function() {
 	// parse applist and display
 	function displayAppList(applist) {
 		// parse and overwrite localStorage
-		NTV.db.set('applist', applist);		
+		apps = NTV.db.set('applist', applist);		
 		// generate ui from localStorage data
 		var apps = NTV.db.get('applist');
-		blueprint.each(apps, function() {
-			var thisApp = this;
-			// get template
-			neckbeard.get('appListItem', function(tmpl) {
-				// parse compiled output as nodes
-				var item = $(neckbeard.compile(tmpl, thisApp));
+		
+		// get template
+		neckbeard.get('appListItem', function() {
+			var tmpl = this;
+			blueprint.each(apps, function() {
+				var thisApp = this
+				  , item = $(neckbeard.compile(tmpl, thisApp));
 				// add it to the list
 				list.append(item);
 			});
@@ -52,7 +54,9 @@ NTV.applist = (function() {
 	
 	return {
 		element : list,
-		apps : apps,
+		apps : function() {
+			return NTV.db.get('applist');
+		},
 		selected : selected
 	};
 	

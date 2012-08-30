@@ -122,17 +122,77 @@
 			});
 		});
 		
-		// server client the app list
+		// give client the app list
 		app.get('/applist', function(req, res) {
+			// generate a temporary unique id for each app
+			var appId = function() {
+				var chars = 'abcdefghijklmnopqrstuvwxyz1234567890'
+				  , id = '';
+				for (var i = 0; i < 10; i++) {
+					id += chars.charAt((Math.random() * chars.length - 1).toFixed());
+				}
+				return id;
+			};
 			
 			// get app list, create array, and send to client
-			
-			// for now fake doing work and return 500
-			setTimeout(function() {
-				res.writeHead(500);
-				res.end();
-			}, 3000);
-			
+			fs.readdir(__dirname + '/apps', function(err, files) {
+				if (err || !files.length) {
+					// if an error is thrown log it and tell the client
+					console.log(err || red + '!!! ' + reset + 'No apps installed. Failed.');
+					res.writeHead(500);
+					res.write('Error reading app directory or no apps are installed.');
+					res.end();
+				} else {
+					// otherwise lets serve up some apps
+					var applist = [];
+					// construct app object from manifest file
+					files.forEach(function(val, key) {
+						var appname = val
+						// get manifest path
+						  , manifest = __dirname + '/apps/' + appname + '/manifest.json'
+						  , appconfig = JSON.parse(fs.readFileSync(manifest));
+						// resolve paths to public route  
+						appconfig.icon = '/apps/' + appname + appconfig.icon;
+						// do the same for each script
+						appconfig.scripts.forEach(function(val, key) {
+							appconfig.scripts[key] = '/apps/' + appname + val;
+						});
+						// give id
+						appconfig.id = appId();
+						// add to list
+						applist.push(appconfig);
+					});
+					
+					res.writeHead(200);
+					res.write(JSON.stringify(applist));
+					res.end();
+				}
+			});
+		});
+		
+		// resolve static content for apps
+		app.get('/apps/:appname/:directory/:file', function(req, res) {
+			// get params
+			var params = req.params
+			  , appname = params.appname
+			  , dir = params.directory
+			  , file = params.file
+			  , path = __dirname + '/apps/' + appname + '/' + dir + '/' + file;
+			// determine if file is valid
+			fs.exists(path, function(valid) {
+				if (valid) {
+					// read the file
+					var asset = fs.readFileSync(path);
+					// and serve it up
+					res.writeHead(200);
+					res.end(asset);
+				} else {
+					// fail
+					res.writeHead(404);
+					res.write('File not found.');
+					res.end();
+				}
+			});
 		});
 
 		/*

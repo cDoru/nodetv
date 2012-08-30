@@ -1,0 +1,9 @@
+{
+	"name" : "Music",
+	"icon" : "/images/icon.png",
+	"home" : "/views/index.jade",
+	"scripts" : [
+		"/scripts/main.js"
+	],
+	"init" : "/app.js"
+}

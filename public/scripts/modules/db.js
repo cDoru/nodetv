@@ -27,7 +27,7 @@ NTV.db = (function() {
 		// convert to JSON string
 		var store = JSON.stringify(data);
 		// store it
-		db.setItem(item, store);
+		db.setItem(itemPrefix + item, store);
 		// give it back
 		return data;
 	}
