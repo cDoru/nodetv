@@ -11,6 +11,9 @@ NTV.applist = (function() {
 	  , list = $('#ntv_applist')
 	  , selected = null;
 	
+	// load styles
+	blueprint.load(['/styles/applist.css']);
+	
 	// get app list data from server and initialize ui
 	blueprint.request({
 		type : 'GET',
@@ -39,6 +42,8 @@ NTV.applist = (function() {
 				// add it to the list
 				list.append(item);
 			});
+			// give focus to the first app in the list
+			NTV.ui.focusOn($('.ntv_app')[0]);
 		});
 		
 		// let the user know it's all good

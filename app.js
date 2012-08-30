@@ -9,7 +9,7 @@
 
 	// init vars
 	var config
-	  , version = '0.1.0'
+	  , version = '0.1.0a'
 	// get modules
 	  , fs = require('fs')
 	  , git = require('gitty')

@@ -9,7 +9,8 @@ NTV.ui = (function() {
 	
 	var tv = $('#tv')
 	  , remote = $('#remote')
-	  , loader = {};
+	  , loader = {}
+	  , hasFocus = null;
 	
 	// create a simple notification alert
 	function notify(text, type, persist) {
@@ -41,10 +42,22 @@ NTV.ui = (function() {
 		}
 	}
 	
+	// switch focus to element
+	function focusOn(element) {
+		var focusElm = $(element)
+		  , className = 'has_focus'
+		  , current = $('.' + className);
+		
+		current.removeClass(className);
+		focusElm.addClass(className);
+		NTV.ui.hasFocus = focusElm;
+	}
 	
 	return {
 		notify : notify,
-		loader : loader
+		loader : loader,
+		focusOn : focusOn,
+		hasFocus : hasFocus
 	};
 	
 })();

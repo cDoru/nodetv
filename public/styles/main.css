@@ -7,7 +7,7 @@
 */
 body {
 	background: url('/assets/images/bg.jpg') top left repeat rgb(136,218,88);
-	cursor: none;
+/*	cursor: none;*/
 	color: #fff;
 	font-family: Comfortaa, Helvetica, sans-serif;
 }
@@ -107,7 +107,11 @@ h1 {
 
 #ntv_version {
 	float: right;
-	margin: 12px;
+	margin: 4px 12px;
+	background: url('/assets/images/icons/48/50.png') left center no-repeat;
+	background-size: 26px 26px;
+	padding: 8px 8px 8px 38px;
+	font-size: 18px;
 }
 
 #ntv_notification {
@@ -117,6 +121,7 @@ h1 {
 	background: url('/assets/images/icons/48/65.png') left center no-repeat;
 	background-size: 26px 26px;
 	padding: 8px 8px 8px 38px;
+	font-size: 18px;
 }
 
 #ntv_notification.ntv_error {

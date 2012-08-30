@@ -1,5 +1,5 @@
 {
-	"name" : "Install Apps",
+	"name" : "Get Apps",
 	"icon" : "/images/icon.png",
 	"home" : "/views/index.jade",
 	"scripts" : [
