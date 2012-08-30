@@ -8,12 +8,13 @@
 NTV.ui = (function() {
 	
 	var tv = $('#tv')
-	  , remote = $('#remote');
+	  , remote = $('#remote')
+	  , loader = {};
 	
 	// create a simple notification alert
-	function notify(text, type) {
+	function notify(text, type, persist) {
 		
-		var notification = $('#notification')
+		var notification = $('#ntv_notification')
 		  , cssClass = (type === 'error') ? 'ntv_error' : '';
 		
 		notification.attr('class','');
@@ -21,13 +22,29 @@ NTV.ui = (function() {
 		notification.html(text);
 		
 		notification.fadeIn(200, function() {
-			notification.delay(1200).fadeOut(200);
+			if (!persist) {
+				notification.delay(2000).fadeOut(200);
+			}
 		});
+	}
+	
+	// loading indicator
+	loader.element = $('#loader');
+	loader.show = function() {
+		if (loader.element.is(':hidden')) {
+			loader.element.fadeIn(100);
+		}	
+	}
+	loader.hide = function() {
+		if (loader.element.is(':visible')) {
+			loader.element.fadeOut(100);
+		}
 	}
 	
 	
 	return {
-		notify : notify
+		notify : notify,
+		loader : loader
 	};
 	
 })();

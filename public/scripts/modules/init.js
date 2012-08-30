@@ -1,5 +1,5 @@
 /*
- * NodeTV - scripts/modules/ntv-client.js
+ * NodeTV - scripts/modules/init.js
  * Author: Gordon Hall
  * 
  * Released under MIT license - see LICENSE

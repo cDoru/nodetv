@@ -10,3 +10,23 @@
     src: url('/assets/fonts/cubic.ttf');
     font-weight: normal;
 }
+
+/* Comfortaa - Standard
+*/
+@font-face {
+    font-family: Comfortaa;
+    src: url('/assets/fonts/Comfortaa-Regular.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Comfortaa;
+    src: url('/assets/fonts/Comfortaa-Light.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Comfortaa;
+    src: url('/assets/fonts/Comfortaa-Bold.ttf');
+    font-weight: bold;
+}

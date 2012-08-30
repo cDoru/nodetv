@@ -1,10 +1,18 @@
+/*
+ * NodeTV - styles/main.css
+ * Author: Gordon Hall
+ */
 
+/* Default body style
+*/
 body {
-	background: url('/assets/images/nodetvBg.jpg') top center no-repeat;
+	background: url('/assets/images/bg.jpg') top left repeat rgb(136,218,88);
 	cursor: none;
+	color: #fff;
+	font-family: Comfortaa, Helvetica, sans-serif;
 }
 
-/* Phone Query
+/* Phone/Remote Query
 */
 @media only screen and (max-device-width: 480px) {
 	#tv {
@@ -21,6 +29,8 @@ body {
 	}
 }
 
+/* Tablet/Remote Query
+*/
 @media only screen and (max-device-width: 1024px) {
 	#tv {
 		display: none;
@@ -33,9 +43,13 @@ body {
 	body {
 		background: #000;
 		cursor: none;
+		color: #fff;
+		font-family: Comfortaa, Helvetica, sans-serif;
 	}
 }
 
+/* TV/Desktop Query
+*/
 @media only screen and (min-width: 1024px) {
 	#remote {
 		display: none;
@@ -46,6 +60,8 @@ body {
 	}
 }
 
+/* Base Styles
+*/
 #tv {
 	position: fixed;
 	top: 0;
@@ -66,7 +82,44 @@ h1 {
 	padding: 0 32px;
 }
 
+#footer {
+	background: rgba(0,0,0,0.5);
+	border-top: 1px solid #000;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 0;
+}
 
-#notification {
+#loader {
+	background: url('/assets/images/ntv_loader.gif') 24px center no-repeat rgba(0,0,0,0.7);
+	background-size: 65px 65px;
+	font-size: 32px;
+	width: 186px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin: -50px 0 0 -153px;
+	padding: 34px 0 34px 120px;
+	border: 2px solid #000;
+}
+
+#ntv_version {
+	float: right;
+	margin: 12px;
+}
+
+#ntv_notification {
 	display: none;
+	float: left;
+	margin: 4px 12px;
+	background: url('/assets/images/icons/48/65.png') left center no-repeat;
+	background-size: 26px 26px;
+	padding: 8px 8px 8px 38px;
+}
+
+#ntv_notification.ntv_error {
+	background: url('/assets/images/icons/48/25.png') left center no-repeat;
+	background-size: 26px 26px;
 }

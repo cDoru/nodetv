@@ -9,6 +9,7 @@
 
 	// init vars
 	var config
+	  , version = '0.1.0'
 	// get modules
 	  , fs = require('fs')
 	  , git = require('gitty')
@@ -116,8 +117,22 @@
 		app.get('/', function(req, res) {
 			res.render('index', { 
 				layout : 'layout',
-				netIp : 'http://' + netIp
+				netIp : 'http://' + netIp,
+				version : version
 			});
+		});
+		
+		// server client the app list
+		app.get('/applist', function(req, res) {
+			
+			// get app list, create array, and send to client
+			
+			// for now fake doing work and return 500
+			setTimeout(function() {
+				res.writeHead(500);
+				res.end();
+			}, 3000);
+			
 		});
 
 		/*

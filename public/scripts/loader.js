@@ -9,9 +9,11 @@ var NTV = (function() {
 	
 	// define modules
 	var modules = [
-		'/scripts/modules/ntv-client.js',
+		'/scripts/modules/init.js',
+		'/scripts/modules/db.js',
 		'/scripts/modules/remote-client.js',
-		'/scripts/modules/ui.js'
+		'/scripts/modules/ui.js',
+		'/scripts/modules/applist.js'
 		]
 	  , netIp = document.title
 	// open socket connection
