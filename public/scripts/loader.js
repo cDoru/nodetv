@@ -10,7 +10,8 @@ var NTV = (function() {
 	// define modules
 	var modules = [
 		'/scripts/modules/ntv-client.js',
-		'/scripts/modules/remote-client.js'
+		'/scripts/modules/remote-client.js',
+		'/scripts/modules/ui.js'
 		]
 	  , netIp = document.title
 	// open socket connection
@@ -39,12 +40,18 @@ var NTV = (function() {
 	  , client = {
 			type : (isMobile.any()) ? clientOverride || 'remote' : clientOverride || 'tv'
 		};
-	
+
 	// tell server what type of device connected
-	socket.on('connected', function(data) {
-		console.log(data);
-		socket.emit('clientType', client);
-	});
+	switch(client.type) {
+		case 'tv':
+			console.log('TV Connected');
+			socket.emit('tvConnected', client);
+		case 'remote':
+			console.log('Remote Connected');
+			socket.emit('remoteConnected', client);
+		default:
+			// device not supported
+	}
 	
 	// load modules
 	blueprint.load(modules, function() {

@@ -7,30 +7,33 @@
 
 module.exports = function(io) {
 	
-	function remoteConnected(socket) {
-		
-		
-		
-	};
-	
 	// set connection and get device information
 	// if remote is connected then start listening
 	// for events
 	io.sockets.on('connection', function(socket) {
+	
 		// tell the client the handshake was good
-		socket.emit('connected', {
+		socket.broadcast.emit('connected', {
 			connected: true
 		});
+
 		// when the client sends type, determine whether
-		// to start remote listener or not
-		socket.on('clientType', function(client) {
-			console.log('Client connected in ' + client.type + ' mode.');
-		});	
+		socket.on('tvConnected', function(client) {
+			console.log('TV Connected!');
+			socket.broadcast.emit('tvConnected', client);
+		});
+		
+		socket.on('remoteConnected', function(client) {
+			console.log('Remote control connected!');
+			socket.broadcast.emit('remoteConnected', client);
+		});
 		
 		// catch button press and pass back to client
 		socket.on('buttonPress', function(button) {
 			console.log('Passing remote input: ' + button.pressed);
+			socket.broadcast.emit('buttonPress', button);
 		});	
+	
 	});
 
 

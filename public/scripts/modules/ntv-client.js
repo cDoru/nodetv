@@ -32,11 +32,11 @@ NTV.init = function() {
 	switch(NTV.client) {
 		// remote control
 		case 'remote':
-			console.log('NodeTV initialized in remote control mode.');
+			console.log('This client is running in REMOTE mode.');
 			result = modes.remote();
 			break;
 		case 'tv':
-			console.log('NodeTV initialized in TV mode.');
+			console.log('This client is running in TV mode.');
 			result = modes.tv();
 			break;
 		default:

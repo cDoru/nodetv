@@ -48,18 +48,18 @@ NTV.remote = (function() {
 			
 		},
 		select : function(e) {
-			alert('select');
+			
 		}
 	});
 	// enable the default action set for app list
 	NTV.actions.applist.enable();
 	
 	// bind the remote buttons to the mapped actions
-	if (NTV.client == 'remote') {
+	if (NTV.client === 'remote') {		
 		blueprint.each(buttons, function(button, elm) {
-			elm.bind('click', function(event) {
+			elm.bind('touchstart', function(event) {
 				// send socket.io event
-				NTV.socket.broadcast('buttonPress', { 
+				NTV.socket.emit('buttonPress', { 
 					pressed : button
 				});
 			});
@@ -69,7 +69,12 @@ NTV.remote = (function() {
 	// listen for socket.io event to execute callback
 	// if in tv mode, also map to keyboard function 
 	// in case user does not have a remote
-	if (NTV.client == 'tv') {
+	if (NTV.client === 'tv') {
+		// tell server what type of device connected
+		NTV.socket.on('remoteConnected', function(data) {
+			NTV.ui.notify('Remote Connected!');
+		});
+		
 		NTV.socket.on('buttonPress', function(button) {
 			console.log('Remote input detected: ' + button.pressed);
 			if (actions[button.pressed]) {
@@ -80,37 +85,37 @@ NTV.remote = (function() {
 		// map button events to keyboard
 		tappa.state({
 			'left' : function() {
-				$('.left', remote).trigger('touchstart');
+				// left
 			},
 			'right' :function() {
-				$('.right', remote).trigger('touchstart');
+				// right
 			},
 			'up' : function() {
-				$('.up', remote).trigger('touchstart');
+				// up
 			},
 			'down' : function() {
-				$('.down', remote).trigger('touchstart');
+				// down
 			},
 			'm' : function() {
-				$('.menu', remote).trigger('touchstart');
+				// menu
 			},
 			'b' : function() {
-				$('.back', remote).trigger('touchstart');
+				// back
 			},
 			'enter' : function() {
-				$('.select', remote).trigger('touchstart');
+				// select
 			},
 			'space' : function() {
-				$('.play', remote).trigger('touchstart');
+				// play
 			},
 			'x' : function() {
-				$('.stop', remote).trigger('touchstart');
+				// stop
 			},
 			'comma' : function() {
-				$('.trackLeft', remote).trigger('touchstart');
+				// trackLeft
 			},
 			'period' : function() {
-				$('.trackRight', remote).trigger('touchstart');
+				// trackRight
 			},
 		});
 	}
