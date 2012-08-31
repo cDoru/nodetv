@@ -1,0 +1,108 @@
+/*
+ * NodeTV - styles/remote.css
+ * Author: Gordon Hall
+ */
+
+/*
+ * Display
+ */
+
+#remote {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: rgba(0,0,0,0.5);
+}
+
+#remote .button {
+	width: 64px;
+	height: 64px;
+	padding: 8px;
+	margin: 6px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: rgba(0,0,0,0.7);
+	border-radius: 36px;
+	text-indent: -9999px;
+}
+
+#remote .button.pressed {
+	opacity: 0.9;
+	box-shadow: inset 0px 3px 5px rgba(0,0,0,0.3);
+}
+
+#remote .navigationcontrols {
+	width: 276px;
+	height: 276px;
+	position: fixed;
+	bottom: 104px;
+	left: 50%;
+	margin-left: -138px;
+}
+
+#remote .systemcontrols {
+	height: 92px;
+	width: 100%;
+	position: fixed;
+	top: 42px;
+	left: 0;
+}
+
+#remote .playercontrols {
+	height: 92px;
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+
+/*
+ * Buttons
+ */
+
+#remote .button.select {
+	background-image: url('/assets/images/icons/64/101.png');
+}
+
+#remote .button.up {
+	background-image: url('/assets/images/icons/64/105.png');
+}
+
+#remote .button.down {
+	background-image: url('/assets/images/icons/64/103.png');
+}
+
+#remote .button.left {
+	background-image: url('/assets/images/icons/64/102.png');
+}
+
+#remote .button.right {
+	background-image: url('/assets/images/icons/64/104.png');
+}
+
+#remote .button.play {
+	background-image: url('/assets/images/icons/64/98.png');
+}
+
+#remote .button.play.paused {
+	background-image: url('/assets/images/icons/64/93.png');
+}
+
+#remote .button.back {
+	background-image: url('/assets/images/icons/64/72.png');
+}
+
+#remote .button.home {
+	background-image: url('/assets/images/icons/64/120.png');
+}
+
+#remote .button.trackLeft {
+	background-image: url('/assets/images/icons/64/92.png');
+}
+
+#remote .button.trackRight {
+	background-image: url('/assets/images/icons/64/94.png');
+}
