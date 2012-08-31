@@ -13,7 +13,8 @@ var NTV = (function() {
 		'/scripts/modules/db.js',
 		'/scripts/modules/remote-client.js',
 		'/scripts/modules/ui.js',
-		'/scripts/modules/applist.js'
+		'/scripts/modules/applist.js',
+		'/scripts/modules/applauncher.js'
 		]
 	  , netIp = document.title
 	// open socket connection
@@ -48,9 +49,11 @@ var NTV = (function() {
 		case 'tv':
 			console.log('TV Connected');
 			socket.emit('tvConnected', client);
+			break;
 		case 'remote':
 			console.log('Remote Connected');
 			socket.emit('remoteConnected', client);
+			break;
 		default:
 			// device not supported
 	}

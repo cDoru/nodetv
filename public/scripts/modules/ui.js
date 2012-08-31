@@ -8,6 +8,7 @@
 NTV.ui = (function() {
 	
 	var tv = $('#tv')
+	  , sounds
 	  , remote = $('#remote')
 	  , loader = {}
 	  , hasFocus = null;
@@ -53,11 +54,31 @@ NTV.ui = (function() {
 		NTV.ui.hasFocus = focusElm;
 	}
 	
+	// sounds api
+	sounds = (function() {
+	    
+	    var sounds = $('audio.effect');
+	    
+	    // play sound by id
+	    function play(id) {
+	        var sound = $('#snd_' + id)[0];
+	        sound.pause();
+	        sound.currentTime = 0;
+	        sound.play();
+	    }
+	    
+	    return {
+	        play : play
+	    };
+	    
+	})();
+	
 	return {
 		notify : notify,
 		loader : loader,
 		focusOn : focusOn,
-		hasFocus : hasFocus
+		hasFocus : hasFocus,
+		sounds : sounds
 	};
 	
 })();

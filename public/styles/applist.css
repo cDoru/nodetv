@@ -5,24 +5,43 @@
 
 #ntv_applistwrapper {
 	overflow: hidden;
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	border-left: 1px solid rgba(255, 255, 255, 0.8);
+	box-shadow: 0px 2px 15px black;
+	width: 500px;
 }
 
 #ntv_applist {
-	margin: 0;
-	padding: 0;
+	margin: 100px 0;
+	padding: 0 26px;
 	list-style-type: none;
 }
 
 #ntv_applist li {
-	float: left;
-	padding: 12px 2.5%;
-	margin: 32px 2.5%;
-	width: 15%;
+	padding: 0;
+	width: 100%;
+}
+
+.ntv_appicon img {
+	width: 38px;
+	margin: 9px;
 }
 
 #ntv_applist li.has_focus {
-	background-color: rgba(0,0,0,0.3);
-	border-radius: 6px;
+	-webkit-transform: scale(1.1);
+	background: -webkit-linear-gradient(top, white 0%,#F1F1F1 50%,#E1E1E1 51%,#F6F6F6 100%);
+	color: black;
+	box-shadow: inset 0px 3px 14px #666;
+	border-top: 1px solid #CCC;
+	-webkit-animation: appSelect 0.2s;
+}
+
+#ntv_applist li.has_focus h3 {
+	text-shadow: none;
 }
 
 .ntv_appicon {
@@ -30,8 +49,26 @@
 }
 
 .ntv_apptitle {
-	padding-left: 80px;
-	margin: 17px 0;
-	font-size: 24px;
-	text-shadow: 2px 2px 5px #000;
+	padding: 15px 12px 15px 80px;
+	margin: 0;
+	font-size: 26px;
+	text-shadow: 2px 2px 5px black;
+}
+
+@-webkit-keyframes appSelect
+{
+	from {
+		-webkit-transform: scale(1);
+		background: -webkit-linear-gradient(top, white 0%,#000000 50%,#000000 51%,#000000 100%);
+		color: #fff;
+		box-shadow: none;
+		border-top: none;
+	}
+	to {
+		-webkit-transform: scale(1.1);
+		background: -webkit-linear-gradient(top, white 0%,#F1F1F1 50%,#E1E1E1 51%,#F6F6F6 100%);
+		color: black;
+		box-shadow: inset 0px 3px 14px #666;
+		border-top: 1px solid #CCC;
+	}
 }

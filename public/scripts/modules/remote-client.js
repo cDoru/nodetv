@@ -38,17 +38,14 @@ NTV.remote = (function() {
 	
 	// create the default action set
 	NTV.actions.applist = new ActionSet({
-		right : function(e) {
-			
-		},
 		up : function(e) {
-			
+			NTV.remote.navList.go('up');
 		},
 		down : function(e) {
-			
+			NTV.remote.navList.go('down');
 		},
 		select : function(e) {
-			
+			NTV.remote.navList.go('select');
 		}
 	});
 	// enable the default action set for app list
@@ -77,6 +74,8 @@ NTV.remote = (function() {
 		
 		NTV.socket.on('buttonPress', function(button) {
 			console.log('Remote input detected: ' + button.pressed);
+			// play click sound
+			NTV.ui.sounds.play('click');
 			if (actions[button.pressed]) {
 				actions[button.pressed].call(this);
 			}
@@ -86,42 +85,93 @@ NTV.remote = (function() {
 		tappa.state({
 			'left' : function() {
 				// left
+				NTV.ui.sounds.play('click');
 			},
 			'right' :function() {
 				// right
+				NTV.ui.sounds.play('click');
 			},
 			'up' : function() {
 				// up
+				NTV.ui.sounds.play('click');
 			},
 			'down' : function() {
 				// down
+				NTV.ui.sounds.play('click');
 			},
 			'm' : function() {
 				// menu
+				NTV.ui.sounds.play('click');
 			},
 			'b' : function() {
 				// back
+				NTV.ui.sounds.play('click');
 			},
 			'enter' : function() {
 				// select
+				NTV.ui.sounds.play('click');
 			},
 			'space' : function() {
 				// play
+				NTV.ui.sounds.play('click');
 			},
 			'x' : function() {
 				// stop
+				NTV.ui.sounds.play('click');
 			},
 			'comma' : function() {
 				// trackLeft
+				NTV.ui.sounds.play('click');
 			},
 			'period' : function() {
 				// trackRight
+				NTV.ui.sounds.play('click');
 			},
 		});
 	}
 	
+	// app list navigation logic
+	var navList = (function() {
+	    
+	    function go(direction) {
+	        var list = $('.ntv_app')
+	          , current = $('.ntv_app.has_focus')[0]
+	          , id = $(current).attr('data-appid');
+	        
+	        switch(direction) {
+	            case 'up':
+	               // move up
+	               if (!(current === list[0])) {
+	                   NTV.ui.focusOn($(current).prev());
+	               }
+	               break;
+	            case 'down':
+	               // move down
+                   if (!(current === (list[list.length - 1]))) {
+                       NTV.ui.focusOn($(current).next());
+                   }
+	               break;
+	            case 'select':
+	               NTV.launch(id);	               
+	               break;
+	            default:
+	               // do nothing
+	        }
+	        
+	        return {
+	            go : go
+	        };
+	    }
+	    
+	    return {
+	        go : go
+	    };
+	    
+	})();
+	
 	return {
-		ActionSet : ActionSet
+		ActionSet : ActionSet,
+		navList : navList
 	};
 	
 })();
