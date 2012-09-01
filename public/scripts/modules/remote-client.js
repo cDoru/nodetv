@@ -52,13 +52,24 @@ NTV.remote = (function() {
 	NTV.actions.applist.enable();
 	
 	// bind the remote buttons to the mapped actions
-	if (NTV.client === 'remote') {		
+	if (NTV.client === 'remote') {
+	    // prevent scroll
+	    $(document).bind('touchmove', function(event) {
+	       event.preventDefault();    
+	    });
+	    // bind button interaction
 		blueprint.each(buttons, function(button, elm) {
 			elm.bind('touchstart', function(event) {
+			    // add active class
+			    $(event.target).addClass('pressed');
 				// send socket.io event
 				NTV.socket.emit('buttonPress', { 
 					pressed : button
 				});
+			});
+			elm.bind('touchend', function(event) {
+			    // remove active class
+                $(event.target).removeClass('pressed');
 			});
 		});
 	}
@@ -143,12 +154,16 @@ NTV.remote = (function() {
 	               // move up
 	               if (!(current === list[0])) {
 	                   NTV.ui.focusOn($(current).prev());
+	               } else {
+	                   NTV.ui.focusOn(list[list.length - 1]);
 	               }
 	               break;
 	            case 'down':
 	               // move down
                    if (!(current === (list[list.length - 1]))) {
                        NTV.ui.focusOn($(current).next());
+                   } else {
+                       NTV.ui.focusOn(list[0]);
                    }
 	               break;
 	            case 'select':

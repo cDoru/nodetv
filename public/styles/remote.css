@@ -14,95 +14,124 @@
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(0,0,0,0.7);
 }
 
-#remote .button {
-	width: 64px;
-	height: 64px;
+#remote button {
+	width: 54px;
+	height: 54px;
 	padding: 8px;
 	margin: 6px;
+	background-size: 48px 48px;
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-color: rgba(0,0,0,0.7);
-	border-radius: 36px;
+	background-color: rgba(0,0,0,0.4);
+	border-radius: 26px;
 	text-indent: -9999px;
+	border: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-#remote .button.pressed {
-	opacity: 0.9;
-	box-shadow: inset 0px 3px 5px rgba(0,0,0,0.3);
+#remote button.pressed {
+	-webkit-transform: scale(1.2);
+	box-shadow: 0px 3px 5px rgba(0,0,0,0.3);
 }
 
 #remote .navigationcontrols {
-	width: 276px;
-	height: 276px;
+	width: 198px;
+	height: 198px;
+	text-align: center;
 	position: fixed;
-	bottom: 104px;
+	top: 50%;
 	left: 50%;
-	margin-left: -138px;
+	margin: -99px 0 0 -99px;
+	-webkit-transform: scale(1.3);
 }
 
 #remote .systemcontrols {
-	height: 92px;
+	height: 66px;
+	padding-top: 12px;
 	width: 100%;
 	position: fixed;
-	top: 42px;
+	text-align: center;
+	font-family: Cubic, Helvetica, sans-serif;
+	top: 0;
 	left: 0;
+	background: rgba(0,0,0,0.8);
+	box-shadow: 65px 0 120px rgba(0,0,0,0.8);
 }
 
 #remote .playercontrols {
-	height: 92px;
+	height: 66px;
 	width: 100%;
 	position: fixed;
 	bottom: 0;
 	left: 0;
+	background: rgba(0,0,0,0.8);
+}
+
+#remote .rem_wrapper {
+	width: 198px;
+	margin: auto;
+	text-align: center;
+}
+
+#remote .logo {
+	display: inline-block;
+	font-family: Cubic, Helvetica, sans-serif;
+	font-size: 24px;
 }
 
 /*
  * Buttons
  */
 
-#remote .button.select {
+#remote button.select {
 	background-image: url('/assets/images/icons/64/101.png');
 }
 
-#remote .button.up {
+#remote button.up {
 	background-image: url('/assets/images/icons/64/105.png');
 }
 
-#remote .button.down {
+#remote button.down {
 	background-image: url('/assets/images/icons/64/103.png');
 }
 
-#remote .button.left {
+#remote button.left {
 	background-image: url('/assets/images/icons/64/102.png');
 }
 
-#remote .button.right {
+#remote button.right {
 	background-image: url('/assets/images/icons/64/104.png');
 }
 
-#remote .button.play {
+#remote button.play {
 	background-image: url('/assets/images/icons/64/98.png');
 }
 
-#remote .button.play.paused {
+#remote button.play.paused {
 	background-image: url('/assets/images/icons/64/93.png');
 }
 
-#remote .button.back {
+#remote button.back {
 	background-image: url('/assets/images/icons/64/72.png');
+	position: fixed;
+	top: 12px;
+	left: 12px;
 }
 
-#remote .button.home {
+#remote button.home {
 	background-image: url('/assets/images/icons/64/120.png');
+	position: fixed;
+	top: 12px;
+	right: 12px;
 }
 
-#remote .button.trackLeft {
+#remote button.trackLeft {
 	background-image: url('/assets/images/icons/64/92.png');
 }
 
-#remote .button.trackRight {
+#remote button.trackRight {
 	background-image: url('/assets/images/icons/64/94.png');
 }
