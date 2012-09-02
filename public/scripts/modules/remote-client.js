@@ -22,7 +22,8 @@ NTV.remote = (function() {
 			trackLeft : $('.trackLeft', remote),
 			trackRight : $('.trackRight', remote)
 		}
-	  , actions = null;
+	  , actions = null
+	  , touchpad = $('#touchpad');
 		
 	// we need to create an action set that can be switched
 	// on the fly, so first an action set constructor and
@@ -72,6 +73,44 @@ NTV.remote = (function() {
                 $(event.target).removeClass('pressed');
 			});
 		});
+		// set up touchpad logic
+		touchpad.bind('touchstart', function(event) {
+		    var touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0]
+		      , pos = {
+		        x : touch.pageX,
+		        y : touch.pageY
+		    }, dist = 96;
+		    // trigger select on tap
+		    touchpad.bind('touchend', function(event) {
+		        buttons.select.trigger('touchstart');
+		    });
+		    // cancel select on move and scroll in appropriate direction
+		    touchpad.bind('touchmove', function(event) {
+		        touchpad.unbind('touchend');
+		        var newTouch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0]
+		          , newPos = {
+		            x : newTouch.pageX,
+		            y : newTouch.pageY
+		        };
+		        
+		        if (newPos.x >= pos.x + dist) { // tracking right
+		            pos = newPos;
+		            buttons.right.trigger('touchstart');
+		        } else if (newPos.x <= pos.x - dist) { // tracking left
+		            pos = newPos;
+                    buttons.left.trigger('touchstart');
+		        } else if (newPos.y >= pos.y + dist) { // tracking down 
+		            pos = newPos;
+                    buttons.down.trigger('touchstart');
+                    event.preventDefault();
+		        } else if (newPos.y <= pos.y - dist) { // tracking up
+		            pos = newPos;
+                    buttons.up.trigger('touchstart');
+                    event.preventDefault();
+		        }
+		    });
+		});
+		
 	}
 	
 	// listen for socket.io event to execute callback
@@ -94,50 +133,21 @@ NTV.remote = (function() {
 	
 		// map button events to keyboard
 		tappa.state({
-			'left' : function() {
-				// left
-				NTV.ui.sounds.play('click');
-			},
-			'right' :function() {
-				// right
-				NTV.ui.sounds.play('click');
-			},
 			'up' : function() {
 				// up
 				NTV.ui.sounds.play('click');
+				NTV.remote.navList.go('up');
 			},
 			'down' : function() {
 				// down
 				NTV.ui.sounds.play('click');
-			},
-			'm' : function() {
-				// menu
-				NTV.ui.sounds.play('click');
-			},
-			'b' : function() {
-				// back
-				NTV.ui.sounds.play('click');
+				NTV.remote.navList.go('down');
 			},
 			'enter' : function() {
 				// select
 				NTV.ui.sounds.play('click');
-			},
-			'space' : function() {
-				// play
-				NTV.ui.sounds.play('click');
-			},
-			'x' : function() {
-				// stop
-				NTV.ui.sounds.play('click');
-			},
-			'comma' : function() {
-				// trackLeft
-				NTV.ui.sounds.play('click');
-			},
-			'period' : function() {
-				// trackRight
-				NTV.ui.sounds.play('click');
-			},
+				NTV.remote.navList.go('select');
+			}
 		});
 	}
 	
