@@ -9,7 +9,9 @@ NTV.applist = (function() {
 	
 	var apps
 	  , list = $('#ntv_applist')
-	  , selected = null;
+	  , selected = null
+	  , launched = {}
+	  , current;
 	
 	// load styles
 	blueprint.load(['/styles/applist.css']);
@@ -41,6 +43,8 @@ NTV.applist = (function() {
 				  , item = $(neckbeard.compile(tmpl, thisApp));
 				// add it to the list
 				list.append(item);
+				// add it to launch map
+				launched[thisApp.id] = false;
 			});
 			// give focus to the first app in the list
 			NTV.ui.focusOn($('.ntv_app')[0]);
@@ -62,7 +66,9 @@ NTV.applist = (function() {
 		apps : function() {
 			return NTV.db.get('applist');
 		},
-		selected : selected
+		selected : selected,
+		launched : launched,
+		current : current
 	};
 	
 })();

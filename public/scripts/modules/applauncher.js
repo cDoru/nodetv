@@ -8,7 +8,17 @@
 NTV.launch = function(app_id) {
     
     // get app by id
-    var app;
+    var app
+      , appCtr = $('#appCtr')
+      , viewSize = {
+          width: window.screen.width - NTV.applist.element.parent().width(),
+          height: window.screen.height
+        }
+      , appdir = app_id.split(':')[0];
+      
+    // adjust the app container size
+    appCtr.width(viewSize.width);
+    appCtr.height(viewSize.height);
     
     // check app id against valid app list in memory
     blueprint.each(NTV.applist.apps(), function() {
@@ -27,11 +37,36 @@ NTV.launch = function(app_id) {
     
     function ready() {
         console.log('Launching ' + app.name + '...');
-        // just hide stuff for now
-        setTimeout(function() {
+                
+        // send launch signal to server
+        blueprint.request({
+            type : 'POST',
+            url : '/launch/' + appdir,
+            success : launchInit,
+            failure : launchErr
+        });  
+            
+        // execute scripts, and load app view
+        function launchInit(view) {
+            // render view
+            appCtr.html(view);
+            if (!NTV.applist.launched[app_id]) {
+                blueprint.load(app.scripts, function() {
+                    NTV.appregistry[appdir].onlaunch.call(this, app);
+                    NTV.applist.launched[app_id] = true;
+                });
+            } else {
+                NTV.appregistry[appdir].onlaunch.call(this, app);
+            }
+            appCtr.fadeIn(200);
+            NTV.ui.loader.hide();
+        }
+        
+        // show error
+        function launchErr() {
             NTV.ui.loader.hide();
             NTV.ui.notify('Failed to launch "' + app.name + '"', 'error', true);
-        }, 2000);
+        }
     }
     
 }

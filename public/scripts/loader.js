@@ -14,7 +14,8 @@ var NTV = (function() {
 		'/scripts/modules/remote-client.js',
 		'/scripts/modules/ui.js',
 		'/scripts/modules/applist.js',
-		'/scripts/modules/applauncher.js'
+		'/scripts/modules/applauncher.js',
+		'/scripts/modules/app-api.js'
 		]
 	  , netIp = document.title
 	// open socket connection

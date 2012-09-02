@@ -24,7 +24,9 @@ NTV.remote = (function() {
 		}
 	  , actions = null
 	  , touchpad = $('#touchpad')
-	  , connected = false;
+	  , hint = $('.instructions', touchpad)
+	  , connected = false
+	  , autoScroll;
 		
 	// we need to create an action set that can be switched
 	// on the fly, so first an action set constructor and
@@ -81,52 +83,77 @@ NTV.remote = (function() {
 		        x : touch.pageX,
 		        y : touch.pageY
 		    }, dist = 64;
-		    // trigger select on tap
-		    touchpad.bind('touchend', function(event) {
-		        buttons.select.trigger('touchstart');
+		    // dismiss hints
+		    hint.fadeOut(1200, function() {
+		        hint.remove();
 		    });
-		    // cancel select on move and scroll in appropriate direction
-		    touchpad.bind('touchmove', function(event) {
-		        // create a handler for when the user swipes and hold position
-		        function onHold(callback) {
-		            touchpad.unbind('touchmove');
-                    var autoScroll = setInterval(callback, 200);
-                    touchpad.bind('touchend', function() {
-                        clearInterval(autoScroll);
-                        touchpad.unbind('touchend');
-                    });
-		        }
-		        // prevent select from firing
-		        touchpad.unbind('touchend');
-		        // get touch event data
-		        var newTouch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0]
-		          , newPos = {
-		            x : newTouch.pageX,
-		            y : newTouch.pageY
-		        };
-		        // determine the direction of the swipe
-		        if (newPos.x >= pos.x + dist) { // tracking right
-		            buttons.right.trigger('touchstart');
-		            onHold(function() {
-                        buttons.right.trigger('touchstart');
-                    });
-		        } else if (newPos.x <= pos.x - dist) { // tracking left
-                    buttons.left.trigger('touchstart');
-                    onHold(function() {
+		    // if only one finger is detected
+		    if (event.originalEvent.touches.length === 1) {
+    		    // try to kill the interval if it's still alive
+    		    if (autoScroll) {
+    		        clearInterval(autoScroll);
+    		    }		    
+    		    // trigger select on tap
+    		    touchpad.bind('touchend', function(event) {
+    		        buttons.select.trigger('touchstart');
+    		    });
+    		    // cancel select on move and scroll in appropriate direction
+    		    touchpad.bind('touchmove', function(event) {
+    		        // create a handler for when the user swipes and hold position
+    		        function onHold(callback) {
+    		            touchpad.unbind('touchmove');
+                        autoScroll = setInterval(callback, 200);
+                        touchpad.bind('touchend', function() {
+                            clearInterval(autoScroll);
+                            touchpad.unbind('touchend');
+                        });
+                        touchpad.bind('touchcancel', function() {
+                            clearInterval(autoScroll);
+                            touchpad.unbind('touchcancel');
+                        });
+    		        }
+    		        // prevent select from firing
+    		        touchpad.unbind('touchend');
+    		        // get touch event data
+    		        var newTouch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0]
+    		          , newPos = {
+    		            x : newTouch.pageX,
+    		            y : newTouch.pageY
+    		        };
+    		        // determine the direction of the swipe
+    		        if (newPos.x >= pos.x + dist) { // tracking right
+    		            buttons.right.trigger('touchstart');
+    		            onHold(function() {
+                            buttons.right.trigger('touchstart');
+                        });
+    		        } else if (newPos.x <= pos.x - dist) { // tracking left
                         buttons.left.trigger('touchstart');
-                    });
-		        } else if (newPos.y >= pos.y + dist) { // tracking down 
-                    buttons.down.trigger('touchstart');
-                    onHold(function() {
+                        onHold(function() {
+                            buttons.left.trigger('touchstart');
+                        });
+    		        } else if (newPos.y >= pos.y + dist) { // tracking down 
                         buttons.down.trigger('touchstart');
-                    });
-		        } else if (newPos.y <= pos.y - dist) { // tracking up
-                    buttons.up.trigger('touchstart');
-                    onHold(function() {
+                        onHold(function() {
+                            buttons.down.trigger('touchstart');
+                        });
+    		        } else if (newPos.y <= pos.y - dist) { // tracking up
                         buttons.up.trigger('touchstart');
-                    });
-		        }
-		    });
+                        onHold(function() {
+                            buttons.up.trigger('touchstart');
+                        });
+    		        }
+    		    });
+    	    } else {
+    	        var touches = event.originalEvent.touches;
+    	        // catch multi touch actions
+    	        switch(touches.length) {
+    	            case 2:
+    	               // 2 fingers
+    	               break;
+    	            default:
+    	               // do nothing
+    	        }
+    	    }
 		});
 		
 	}

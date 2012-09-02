@@ -24,7 +24,8 @@
 	  , io = require('socket.io').listen(app)
 	  , port = 1337
 	  , nslookup = require('dns').lookup
-	  , netIp;
+	  , netIp
+	  , launched_apps = {};
 	
 	// console output colors
 	var red = '\u001b[31m'
@@ -158,7 +159,7 @@
 							appconfig.scripts[key] = '/apps/' + appname + val;
 						});
 						// give id
-						appconfig.id = appId();
+						appconfig.id = appname + ':' + appId();
 						// add to list
 						applist.push(appconfig);
 					});
@@ -193,6 +194,42 @@
 					res.end();
 				}
 			});
+		});
+		
+		// app launcher/ui server
+		app.post('/launch/:appname', function(req, res) {
+		    var appname = req.params.appname
+              , app_dir = __dirname + '/apps/' + appname
+              , appconfig
+              , manifest = app_dir + '/manifest.json';
+            // sanity check
+            if (fs.existsSync(manifest)) {
+                appconfig = JSON.parse(fs.readFileSync(manifest));
+                // determine if the view should be rendered or sent
+                var splitup = appconfig.home.split('.')
+                  , last = splitup.length - 1;
+                // render jade template
+                if (splitup[last] == 'jade') {
+                    res.render(app_dir + appconfig.home, {
+                        layout: false
+                    });
+                // render static html
+                } else if (splitup[last] == 'html') {
+                    res.writeHead(200);
+                    fs.readFile(app_dir + appconfig.home, function(err, data) {
+                        res.write(data);
+                        res.end();
+                    });
+                }
+                // require server side code
+                if (appconfig.init && !(launched_apps[appname])) {
+                    require(app_dir + appconfig.init)(app);
+                    launched_apps[appname] = true
+                }
+            } else {
+                res.writeHead(404);
+                res.end();
+            }
 		});
 
 		/*
