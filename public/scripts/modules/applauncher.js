@@ -10,13 +10,16 @@ NTV.launch = function(app_id) {
     // get app by id
     var app;
     
+    // check app id against valid app list in memory
     blueprint.each(NTV.applist.apps(), function() {
+        // if all is good
         if (this.id === app_id) {
             app = this;
             console.log(this.name);
              // show loader and notification
             NTV.ui.loader.show();
             NTV.ui.notify('Launching "' + this.name + '"...', null, true);
+            // then launch it!
             ready();
             return false;
         }

@@ -23,7 +23,8 @@ NTV.remote = (function() {
 			trackRight : $('.trackRight', remote)
 		}
 	  , actions = null
-	  , touchpad = $('#touchpad');
+	  , touchpad = $('#touchpad')
+	  , connected = false;
 		
 	// we need to create an action set that can be switched
 	// on the fly, so first an action set constructor and
@@ -137,6 +138,7 @@ NTV.remote = (function() {
 		// tell server what type of device connected
 		NTV.socket.on('remoteConnected', function(data) {
 			NTV.ui.notify('Remote Connected!');
+			NTV.remote.connected = true;
 		});
 		
 		NTV.socket.on('buttonPress', function(button) {
@@ -213,7 +215,8 @@ NTV.remote = (function() {
 	
 	return {
 		ActionSet : ActionSet,
-		navList : navList
+		navList : navList,
+		connected : connected
 	};
 	
 })();

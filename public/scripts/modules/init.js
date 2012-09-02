@@ -22,6 +22,12 @@ NTV.init = function() {
 	// tv mode
 	modes.tv = function() {
 		
+		setTimeout(function() {
+		    if (!NTV.remote.connected) {
+		        NTV.ui.notify('To enable remote control, open "' + document.title + ':' + location.port + '" on your smartphone.', null, true);
+		    }
+		}, 2000);
+		
 		return {
 			success : true,
 			mode : 'tv'
