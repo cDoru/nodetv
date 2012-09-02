@@ -79,34 +79,51 @@ NTV.remote = (function() {
 		      , pos = {
 		        x : touch.pageX,
 		        y : touch.pageY
-		    }, dist = 96;
+		    }, dist = 64;
 		    // trigger select on tap
 		    touchpad.bind('touchend', function(event) {
 		        buttons.select.trigger('touchstart');
 		    });
 		    // cancel select on move and scroll in appropriate direction
 		    touchpad.bind('touchmove', function(event) {
+		        // create a handler for when the user swipes and hold position
+		        function onHold(callback) {
+		            touchpad.unbind('touchmove');
+                    var autoScroll = setInterval(callback, 200);
+                    touchpad.bind('touchend', function() {
+                        clearInterval(autoScroll);
+                        touchpad.unbind('touchend');
+                    });
+		        }
+		        // prevent select from firing
 		        touchpad.unbind('touchend');
+		        // get touch event data
 		        var newTouch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0]
 		          , newPos = {
 		            x : newTouch.pageX,
 		            y : newTouch.pageY
 		        };
-		        
+		        // determine the direction of the swipe
 		        if (newPos.x >= pos.x + dist) { // tracking right
-		            pos = newPos;
 		            buttons.right.trigger('touchstart');
+		            onHold(function() {
+                        buttons.right.trigger('touchstart');
+                    });
 		        } else if (newPos.x <= pos.x - dist) { // tracking left
-		            pos = newPos;
                     buttons.left.trigger('touchstart');
+                    onHold(function() {
+                        buttons.left.trigger('touchstart');
+                    });
 		        } else if (newPos.y >= pos.y + dist) { // tracking down 
-		            pos = newPos;
                     buttons.down.trigger('touchstart');
-                    event.preventDefault();
+                    onHold(function() {
+                        buttons.down.trigger('touchstart');
+                    });
 		        } else if (newPos.y <= pos.y - dist) { // tracking up
-		            pos = newPos;
                     buttons.up.trigger('touchstart');
-                    event.preventDefault();
+                    onHold(function() {
+                        buttons.up.trigger('touchstart');
+                    });
 		        }
 		    });
 		});
