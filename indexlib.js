@@ -23,11 +23,50 @@ module.exports = function(path, io, success, error) {
         'jpe' : 'photo',
         'png' : 'photo',
         'gif' : 'photo'   
-    }, library = {
+    } , library = {
         video : [],
         audio : [],
         photo : []
-    };
+    } , fs = require('fs')
+      , currentDir = path;
+    // start scanning over files in the specified directory
+	console.log('Scanning for media at ' + path);
+    scan(currentDir);
+    // when it's done, call success
+    success.call(this, library);
+    // recursive scanning function
+    function scan(path) {
+    	// sychronous so we know when it's finished
+    	var files = fs.readdirSync(path);
+    	files.forEach(function(val, key) {
+    		// make sure its a file
+    		if (fs.lstatSync(path + '/' + val).isFile()) {
+    			// make sure it's supported
+    			var type = filetypes[fileExt(val)];
+    			console.log(type);
+    			if (type) {
+    				var media = {
+    					type : type,
+    					name : val.substr(0, val.lastIndexOf('.')),
+    					path : path + '/' + val
+    				};
+    				library[type].push(media);
+    				// message the client saying we are scanning
+		    		io.sockets.emit('libscan', {
+		    			path : val
+		    		});
+    			}
+    		// if it is a directory, then scan it too
+    		} else if (fs.lstatSync(path + '/' + val).isDirectory() && val.charAt(0) !== '.') {
+    			scan(path + '/' + val);
+    		}
+    	});
+    }
+    // helper function for getting file extention
+    function fileExt(filename) {
+    	var ext = filename.lastIndexOf('.');
+    	return (ext < 0) ? '' : filename.substr(ext + 1);
+    }
     // when completed, fire callback or if error occurs fire
     // error function
 }

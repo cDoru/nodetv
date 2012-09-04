@@ -287,16 +287,22 @@
 		
 		// index library
 		app.post('/indexLibrary', function(req, res) {
-		    var path = req.body.path;
+			var path = qs.parse(req.url.split('?')[1]).path;
 		    // scan path for movies, music, and pictures
 		    require('./indexlib.js')(path, io, function(data) {
 		        // respond with library
-		        res.write(data);
+		        res.write(JSON.stringify(data));
 		        res.end();
 		    }, function(err) {
 		        res.writeHead(500);
 		        res.end();
 		    });
+		});
+		
+		// send the media request by the path
+		app.get('/play', function(req, res) {
+		    var path = qs.parse(req.url.split('?')[1]).path;
+		    // retrieve media and respond with it
 		});
 
 		/*

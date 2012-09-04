@@ -78,6 +78,11 @@ NTV.db = (function() {
         NTV.socket.on('libIndex', onData);
 	}
 	
+	// listen for library scan event and log it to console
+	NTV.socket.on('libscan', function(data) {
+		console.log('Indexing file: ' + data.path);
+	});
+	
 	return {
 		get : get,
 		set : set,
