@@ -36,11 +36,42 @@ NTV.db = (function() {
 		db.removeItem(itemPrefix + item);
 	}
 	
+	// check if NodeTV has indexed a library yet
+	if (!NTV.db.get('library')) {
+	    // library has not been generated
+	    // so initiliaze prompt
+	}
+	
+	// sends a post request to the server based on type [lan, local, mount],
+	// the path to the media directory, and ondata function that can be used
+	// for messaging to the user the status of the index and a callback 
+	// function - the callback gets executed after library is indexed and stored
+	function indexLibrary(path, onData, callback) {
+        // return library
+        blueprint.request({
+            type : 'POST',
+            url : '/indexlibrary',
+            data : {
+                path : path
+            },
+            success : function(data) {
+                var library = NTV.db.set('library', JSON.parse(data));
+                callback.call(this, library);
+            },
+            failure : function(data) {
+                NTV.ui.notify(data, 'error', true);
+            }
+        });
+        // listen for progress
+        NTV.socket.on('libIndex', onData);
+	}
+	
 	return {
 		get : get,
 		set : set,
 		clear : db.clear,
-		remove : remove
+		remove : remove,
+		index : indexLibrary
 	};
 	
 })();

@@ -231,6 +231,30 @@
                 res.end();
             }
 		});
+		
+		// get mounted drives
+		app.get('/mnt', function(req, res) {
+		    // determine os type
+		    
+		    // find and parse mounted disks
+		    
+		    // send it back to client
+		    
+		});
+		
+		// index library
+		app.post('/indexlibrary', function(req, res) {
+		    var path = req.body.path;
+		    // scan path for movies, music, and pictures
+		    require('./indexlib.js')(path, io, function(data) {
+		        // respond with library
+		        res.write(data);
+		        res.end();
+		    }, function(err) {
+		        res.writeHead(500);
+		        res.end();
+		    });
+		});
 
 		/*
 		 * start server
