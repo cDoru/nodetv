@@ -15,6 +15,7 @@
 	  , git = require('gitty')
 	// get os module
 	  , os = require('os')
+	  , qs = require('querystring')
 	// get middleware
 	  , express = require('express')
 	  , app = express.createServer()
@@ -258,6 +259,30 @@
 		    		res.end();
 		    	}
 		    });		    
+		});
+		
+		// finds subdirectories of the passed path and returns them in an array
+		app.get('/listDirectories', function(req, res) {		
+			// get the path var
+			var path = qs.parse(req.url.split('?')[1]).path
+			  , dirs = [];
+			// if the path is good then get it's dirs
+			if (fs.existsSync(path)) {
+				fs.readdir(path, function(err, files) {
+					files.forEach(function(val,key) {
+						if (fs.lstatSync(path + '/' + val).isDirectory() && val.charAt(0) !== '.') {
+							dirs.push(val);
+						}
+					});
+					res.write(JSON.stringify(dirs));
+					res.end();
+				});
+			// otherwise fail	
+			} else {
+				res.writeHead(500);
+				res.write('Invalid path.');
+				res.end();
+			}
 		});
 		
 		// index library

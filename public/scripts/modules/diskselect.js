@@ -19,6 +19,21 @@ NTV.diskselect = (function() {
 		});
 	}
 	
+	function listDirectories(path, callback) {
+		// create query
+		var path = '?' + { path : path };
+		// send request for directories
+		blueprint.request({
+			type : 'GET',
+			url : '/listDirectories' + path,
+			expect : 'json',
+			success : callback,
+			failure : function(err) {
+				NTV.ui.notify(err, 'error', true);
+			}
+		});
+	}
+	
 	return {
 		init : init
 	};
