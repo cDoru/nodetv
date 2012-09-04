@@ -10,9 +10,10 @@ var NTV = (function() {
 	// define modules
 	var modules = [
 		'/scripts/modules/init.js',
+		'/scripts/modules/ui.js',
+		'/scripts/modules/diskselect.js',
 		'/scripts/modules/db.js',
 		'/scripts/modules/remote-client.js',
-		'/scripts/modules/ui.js',
 		'/scripts/modules/applist.js',
 		'/scripts/modules/applauncher.js',
 		'/scripts/modules/app-api.js'

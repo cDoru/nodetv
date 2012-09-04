@@ -233,17 +233,35 @@
 		});
 		
 		// get mounted drives
-		app.get('/mnt', function(req, res) {
+		app.get('/getMountedDisks', function(req, res) {
 		    // determine os type
-		    
+		    var platform = os.platform()
+		      , disks = []
+		      , paths = {
+		      		'darwin' : '/Volumes',
+		      		'linux' : '/mnt'
+		      };
 		    // find and parse mounted disks
-		    
-		    // send it back to client
-		    
+		    fs.readdir(paths[platform], function(err, data) {
+		    	if (err) {
+		    		res.writeHead(500);
+		    		res.end();
+		    	} else {
+		    		data.forEach(function(val, key) {
+		    			var disk = {
+		    				name : val,
+		    				path : paths[platform] + '/' + val
+		    			};
+		    			disks.push(disk);
+		    		});
+		    		res.write(JSON.stringify(disks));
+		    		res.end();
+		    	}
+		    });		    
 		});
 		
 		// index library
-		app.post('/indexlibrary', function(req, res) {
+		app.post('/indexLibrary', function(req, res) {
 		    var path = req.body.path;
 		    // scan path for movies, music, and pictures
 		    require('./indexlib.js')(path, io, function(data) {

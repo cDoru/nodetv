@@ -37,9 +37,21 @@ NTV.db = (function() {
 	}
 	
 	// check if NodeTV has indexed a library yet
-	if (!NTV.db.get('library')) {
+	if (!get('library')) {
 	    // library has not been generated
 	    // so initiliaze prompt
+	    NTV.ui.loader.show();
+	    // get the mounted disks
+	    blueprint.request({
+	    	type : 'GET',
+	    	url : '/getMountedDisks',
+	    	expect: 'json',
+	    	success : NTV.diskselect.init,
+	    	failure : function() {
+	    		NTV.ui.loader.hide();
+	    		NTV.ui.notify('Failed to detect mounted disks.', 'error', true);
+	    	}
+	    });
 	}
 	
 	// sends a post request to the server based on type [lan, local, mount],
@@ -50,12 +62,12 @@ NTV.db = (function() {
         // return library
         blueprint.request({
             type : 'POST',
-            url : '/indexlibrary',
+            url : '/indexLibrary',
             data : {
                 path : path
             },
             success : function(data) {
-                var library = NTV.db.set('library', JSON.parse(data));
+                var library = set('library', JSON.parse(data));
                 callback.call(this, library);
             },
             failure : function(data) {
