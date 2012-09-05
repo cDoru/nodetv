@@ -8,7 +8,8 @@
 NTV.db = (function() {
 	
 	var db = localStorage
-	  , itemPrefix = 'ntv_';
+	  , itemPrefix = 'ntv_'
+	  , indexRun = false;
 	  
 	
 	function get(item) {
@@ -59,29 +60,24 @@ NTV.db = (function() {
 	// for messaging to the user the status of the index and a callback 
 	// function - the callback gets executed after library is indexed and stored
 	function indexLibrary(path, onData, callback) {
+	    if (!indexRun) {
+    	    // listen for progress if not already listening
+            NTV.socket.on('libscan', onData);
+       }
         // return library
         blueprint.request({
             type : 'POST',
-            url : '/indexLibrary',
-            data : {
-                path : path
-            },
+            url : '/indexLibrary?' + blueprint.querystring.make({ path : path }),
             success : function(data) {
                 var library = set('library', JSON.parse(data));
                 callback.call(this, library);
+                indexRun = true;
             },
             failure : function(data) {
                 NTV.ui.notify(data, 'error', true);
             }
         });
-        // listen for progress
-        NTV.socket.on('libIndex', onData);
 	}
-	
-	// listen for library scan event and log it to console
-	NTV.socket.on('libscan', function(data) {
-		console.log('Indexing file: ' + data.path);
-	});
 	
 	return {
 		get : get,

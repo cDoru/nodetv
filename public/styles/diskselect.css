@@ -1,0 +1,54 @@
+/*
+ * NodeTV - styles/diskselect.css
+ * Author: Gordon Hall
+ */
+
+#ntv_diskselect {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	font-size: 32px;
+	text-align: center;
+}
+
+#ntv_diskselect .window {
+	margin: 48px auto;
+	width: 800px;
+	background: rgba(0,0,0,0.8);
+	border: 1px solid rgba(255,255,255,0.8);
+	border-radius: 6px;
+	padding: 24px;
+}
+
+#ntv_diskselect #detectedDrives {
+	list-style-type: none;
+	border: 1px solid rgba(255,255,255,0.4);
+	padding: 0;
+	box-shadow: 0px 0px 6px #000;
+	border-radius: 4px;
+	background-color: #000;
+} 
+
+#ntv_diskselect #detectedDrives li {
+	background-size: 48px 48px;
+	font-size: 42px;
+	padding: 8px 0 0px 24px;
+	text-align: left;
+}
+
+#ntv_diskselect #detectedDrives li::before {
+	content: '\00bb  ';
+}
+
+#ntv_diskselect .selectDirectory {
+	display: none;
+}
+
+#ntv_diskselect .info {
+	font-weight: bold;
+}
+
+#ntv_diskselect .hint {
+	font-size: 22px;
+}

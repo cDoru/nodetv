@@ -37,13 +37,13 @@ module.exports = function(path, io, success, error) {
     // recursive scanning function
     function scan(path) {
     	// sychronous so we know when it's finished
-    	var files = fs.readdirSync(path);
+    	var files = fs.readdirSync(path)
+    	  , total = 0;
     	files.forEach(function(val, key) {
     		// make sure its a file
     		if (fs.lstatSync(path + '/' + val).isFile()) {
     			// make sure it's supported
     			var type = filetypes[fileExt(val)];
-    			console.log(type);
     			if (type) {
     				var media = {
     					type : type,
@@ -51,10 +51,15 @@ module.exports = function(path, io, success, error) {
     					path : path + '/' + val
     				};
     				library[type].push(media);
-    				// message the client saying we are scanning
-		    		io.sockets.emit('libscan', {
-		    			path : val
-		    		});
+    				// increment the total indexed files
+    				total++;
+    				// on every 6th file (stack overflow concerns) message user
+    				if (total % 6 === 0) {
+        				// message the client saying we are scanning
+    		    		io.sockets.emit('libscan', {
+    		    			path : val
+    		    		});
+    		    	}
     			}
     		// if it is a directory, then scan it too
     		} else if (fs.lstatSync(path + '/' + val).isDirectory() && val.charAt(0) !== '.') {

@@ -31,7 +31,7 @@
 	margin: 9px;
 }
 
-#ntv_applist li.has_focus {
+li.has_focus {
 	-webkit-transform: scale(1.1);
 	background: -webkit-linear-gradient(top, white 0%,#F1F1F1 50%,#E1E1E1 51%,#F6F6F6 100%);
 	color: black;
